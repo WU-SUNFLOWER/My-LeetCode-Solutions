@@ -11,7 +11,7 @@
  */
 class Solution {
 public:
-    int PathSumWithFixedRoot(TreeNode* node, int target_sum) {
+    int64_t PathSumWithFixedRoot(TreeNode* node, int64_t target_sum) {
         if (node == nullptr) {
             return 0;
         }
