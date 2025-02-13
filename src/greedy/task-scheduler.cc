@@ -1,24 +1,20 @@
 class Solution {
 public:
     int leastInterval(vector<char>& tasks, int n) {
-        std::unordered_map<char, int> task_count;
+        std::unordered_map<char, int> counter;
 
+        int max_task_cnt = 0;
         for (char task : tasks) {
-            task_count[task] += 1;
+            max_task_cnt = std::max(max_task_cnt, ++counter[task]);
         }
 
-        int max_task_count = 0;
-        for (auto [_, cur_task_count] : task_count) {
-            max_task_count = std::max(max_task_count, cur_task_count);
-        }
-
-        int how_many_tasks_with_max_count = 0;
-        for (auto [_, cur_task_count] : task_count) {
-            if (cur_task_count == max_task_count) {
-                ++how_many_tasks_with_max_count;
+        int how_many_tasks_with_max_cnt = 0;
+        for (auto [_, cnt] : counter) {
+            if (cnt == max_task_cnt) {
+                ++how_many_tasks_with_max_cnt;
             }
         }
 
-        return std::max((int)tasks.size(), (n + 1) * (max_task_count - 1) + how_many_tasks_with_max_count);
+        return std::max((max_task_cnt - 1) * (n + 1) + how_many_tasks_with_max_cnt, (int)tasks.size());
     }
 };

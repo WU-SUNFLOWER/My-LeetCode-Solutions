@@ -11,24 +11,23 @@
  */
 class Solution {
 private:
-    int max_path_price_ = (1ll << 31);
+    int ans_ = 1 << 31;
 public:
-    int MaxGain(TreeNode* node) {
-        if (!node) {
+    int ComputeMaxGain(TreeNode* cur) {
+        if (!cur) {
             return 0;
         }
 
-        int left_max_gain = std::max(MaxGain(node->left), 0);
-        int right_max_gain = std::max(MaxGain(node->right), 0);
+        int max_gain_left = ComputeMaxGain(cur->left);
+        int max_gain_right = ComputeMaxGain(cur->right);
 
-        int current_path_price = node->val + left_max_gain + right_max_gain;
-        max_path_price_ = std::max(max_path_price_, current_path_price);
+        ans_ = std::max({ ans_, max_gain_left + max_gain_right + cur->val });
 
-        return node->val + std::max(left_max_gain, right_max_gain);
+        return std::max({ max_gain_left + cur->val, max_gain_right + cur->val, cur->val, 0 });
     }
 
     int maxPathSum(TreeNode* root) {
-        MaxGain(root);
-        return max_path_price_;
+        ComputeMaxGain(root);
+        return ans_;
     }
 };
