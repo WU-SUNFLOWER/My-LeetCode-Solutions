@@ -11,30 +11,35 @@
  */
 class Solution {
 public:
-    int countLevel(TreeNode* node) {
-        int level = 0;
-        while (node != nullptr) {
-            ++level;
-            node = node->left;
+    int ComputeTreeMaxDepth(TreeNode* root) {
+        int depth = 0;
+        while (root) {
+            ++depth;
+            root = root->left;
         }
-        return level;
+        return depth;
     }
 
-    int countNodes(TreeNode* root) {
-        if (!root) {
+    int countNodes(TreeNode* node) {
+        if (!node) {
             return 0;
         }
 
-        int left_level = countLevel(root->left);
-        int right_level = countLevel(root->right);
-
-        // 如果可以判定左子树一定是满二叉树
-        if (left_level == right_level) {
-            return 1 + ((1 << left_level) - 1) + countNodes(root->right);
+        int node_id = 1;
+        // 访问到叶子节点时，退出循环
+        while (node->left || node->right) {
+            int left_depth = ComputeTreeMaxDepth(node->left);
+            int right_depth = ComputeTreeMaxDepth(node->right);
+            // 如果左右深度一直，往右走
+            // 如果左边的深度比右边大，往左走
+            if (left_depth == right_depth) {
+                node = node->right;
+                node_id = 2 * node_id + 1;
+            } else {
+                node = node->left;
+                node_id = 2 * node_id;
+            }
         }
-        // 如果可以判定右子树一定是满二叉树
-        else {
-            return 1 + ((1 << right_level) - 1) + countNodes(root->left);
-        }
+        return node_id;
     }
 };
